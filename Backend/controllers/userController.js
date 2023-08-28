@@ -79,3 +79,32 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.adminLogin = async (req, res) => {
+    try {
+      const { email, password } = req.body;
+  
+      // Check if user with the provided email exists
+      const admin = await Admin.findOne({ email });
+      if (!admin) {
+        return res.status(401).json({ message: 'Authentication failed' });
+      }
+  
+      // Compare the provided password with the hashed password
+      const passwordMatch = await bcrypt.compare(password, admin.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ message: 'Authentication failed' });
+      }
+  
+      // Generate JWT token
+      const token = jwt.sign(
+        { adminId: admin._id, adminname: admin.adminname },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+  
+      res.status(200).json({ token });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
