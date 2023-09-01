@@ -28,6 +28,7 @@ export const loginUser = (userData) => async (dispatch) => {
 
     // Save token to local storage
     localStorage.setItem("token", token);
+    localStorage.setItem("username", username);
 
     dispatch({
       type: "LOGIN_SUCCESS",
@@ -47,6 +48,7 @@ export const loginUser = (userData) => async (dispatch) => {
 export const logoutUser = () => (dispatch) => {
   // Clear token from local storage
   localStorage.removeItem("token");
+  localStorage.removeItem("username");
   dispatch({ type: "LOGOUT" });
   // Redirect the user to the login page
   // You can use a router library like react-router for this

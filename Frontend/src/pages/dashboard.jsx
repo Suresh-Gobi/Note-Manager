@@ -7,6 +7,10 @@ const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
+  // Retrieve the username and email from localStorage
+  const storedUsername = localStorage.getItem("username");
+  
+
   const handleLogout = () => {
     dispatch(logoutUser());
   };
@@ -20,8 +24,7 @@ const Dashboard = () => {
   return (
     <div>
       <h2>Dashboard</h2>
-      {/* <p>Welcome, {user.username}!</p> */}
-      <p>Welcome, {user.username || "Guest"}!</p>
+      <p>Welcome, {user.username || storedUsername || "Guest"}!</p>
       <p>Email: {user.email || "N/A"}</p>
       <button onClick={handleLogout}>Logout</button>
     </div>
