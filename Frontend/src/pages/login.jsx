@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../actions/userActions';
 import {useNavigate} from 'react-router-dom';
+import '../assets/styles/main.css';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,8 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div> 
+      <div className='home-background'>
       <h2>Login</h2>
       <input
         type="email"
@@ -38,6 +40,7 @@ const Login = () => {
       />
       <button onClick={handleLogin}>Login</button>
       {error && <p>{error}</p>}
+      </div>
     </div>
   );
 };
