@@ -81,6 +81,39 @@ export const addNote = (noteData) => async (dispatch) => {
   }
 };
 
+// Add this action to userActions.js
+export const getAllNotes = () => async (dispatch) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    // Ensure the token is available before making the request
+    if (!token) {
+      throw new Error("Token is missing");
+    }
+
+    // Set up the request headers with the token
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    // Perform API call to get all notes
+    const response = await axios.get("http://localhost:5000/users/getAllNote");
+
+    // Dispatch the notes to the state
+    dispatch({
+      type: "GET_ALL_NOTES_SUCCESS",
+      notes: response.data.notes,
+    });
+  } catch (error) {
+    // Handle error (e.g., display an error message to the user)
+    console.error(error);
+    // You can dispatch an action here if needed
+    // dispatch({ type: "GET_ALL_NOTES_FAILURE", error });
+  }
+};
+
+
 export const logoutUser = () => (dispatch) => {
   // Clear token from local storage
   localStorage.removeItem("token");
