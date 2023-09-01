@@ -45,6 +45,42 @@ export const loginUser = (userData) => async (dispatch) => {
   }
 };
 
+export const addNote = (noteData) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    // Ensure the token is available before making the request
+    if (!token) {
+      throw new Error("Token is missing");
+    }
+
+    // Set up the request headers with the token
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    // Perform API call to add a note
+    const response = await axios.post(
+      "http://localhost:5000/users/addNote",
+      noteData,
+      config // Include the config with headers
+    );
+
+    // Handle success (e.g., show a success message to the user)
+    console.log(response.data);
+
+    // You can dispatch an action here if needed
+    // dispatch({ type: "ADD_NOTE_SUCCESS" });
+  } catch (error) {
+    // Handle error (e.g., display an error message to the user)
+    console.error(error);
+    // You can dispatch an action here if needed
+    // dispatch({ type: "ADD_NOTE_FAILURE", error });
+  }
+};
+
 export const logoutUser = () => (dispatch) => {
   // Clear token from local storage
   localStorage.removeItem("token");
