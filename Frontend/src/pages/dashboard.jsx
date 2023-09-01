@@ -1,14 +1,14 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-// import { logoutUser } from '../actions/authActions'; 
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../actions/userActions";
 
-const Dashboard = () => { // Make sure the component name is capitalized
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-  const user = useSelector(state => state.auth.user);
+const Dashboard = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    // dispatch(logoutUser());
+    dispatch(logoutUser());
   };
 
   if (!isAuthenticated) {
@@ -20,11 +20,12 @@ const Dashboard = () => { // Make sure the component name is capitalized
   return (
     <div>
       <h2>Dashboard</h2>
-      {/* <p>Welcome, {user.username}!</p>
-      <p>Email: {user.email}</p> */}
-      {/* <button onClick={handleLogout}>Logout</button> */}
+      {/* <p>Welcome, {user.username}!</p> */}
+      <p>Welcome, {user.username || "Guest"}!</p>
+      <p>Email: {user.email || "N/A"}</p>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
 
-export default Dashboard; // Make sure to use "Dashboard" instead of "dashboard"
+export default Dashboard;

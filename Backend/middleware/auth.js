@@ -9,7 +9,9 @@ exports.verifyToken = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
+    // Split the token and exclude the "Bearer" prefix
+    const tokenValue = token.split(' ')[1];
+    const decoded = jwt.verify(tokenValue, process.env.JWT_SECRET, { clockTimestamp: Date.now() });
     req.user = decoded; // Attach decoded user information to the request object
     next(); // Continue to the next middleware or route handler
   } catch (error) {

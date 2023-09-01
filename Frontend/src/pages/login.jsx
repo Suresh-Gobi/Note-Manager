@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../actions/userActions';
+import {useNavigate} from 'react-router-dom';
 
-const login = () => {
+const Login = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    dispatch(loginUser({ email, password }));
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      await dispatch(loginUser({ email, password }));
+      // If login is successful, you can perform redirection here
+      navigate('/dashboard');
+    } catch (err) {
+      setError('Login failed. Please check your credentials.'); // Handle login error
+    }
   };
 
   return (
@@ -27,8 +37,9 @@ const login = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Login</button>
+      {error && <p>{error}</p>}
     </div>
   );
 };
 
-export default login;
+export default Login;
