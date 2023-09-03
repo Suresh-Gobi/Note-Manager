@@ -10,7 +10,7 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 function App() {

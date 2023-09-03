@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../actions/userActions";
-import { addNote } from "../actions/userActions"; // Import the addNote action
+import { addNote } from "../actions/userActions";
+import "../assets/styles/main.css";
+import { Modal, Button, Form } from "react-bootstrap";
 
 const Dashboard = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -13,62 +15,89 @@ const Dashboard = () => {
   const [noteTitle, setNoteTitle] = useState("");
   const [noteSubject, setNoteSubject] = useState("");
   const [note, setNote] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); // State for success message
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const handleLogout = () => {
     dispatch(logoutUser());
   };
 
   const handleAddNote = async () => {
-    // Dispatch the addNote action with the note data
     try {
       await dispatch(addNote({ noteTitle, noteSubject, note }));
-      // If the note was added successfully, show the success message
       setSuccessMessage("Note Added Successfully");
     } catch (error) {
-      // Handle error (e.g., display an error message to the user)
       console.error(error);
-      // You can dispatch an action here if needed
-      // dispatch({ type: "ADD_NOTE_FAILURE", error });
     }
   };
 
   if (!isAuthenticated) {
-    // Redirect to login if not authenticated
-    // You can use a router library like react-router for this
     return null;
   }
 
   return (
-    <div>
-      <h2>Dashboard</h2>
-      <p>Welcome, {username || "Guest"}!</p>
-      <p>Email: {email || "N/A"}</p>
-      <button onClick={handleLogout}>Logout</button>
+    <div className="dashboard-container">
+      <div className="sidebar">
+        <h2>Note-Manager</h2>
+        <hr />
+        <h5>Welcome, {username}!</h5>
+        <button className="btn btn-danger" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
 
-      {/* Add Note Form */}
-      <h3>Add a Note</h3>
-      <input
-        type="text"
-        placeholder="Note Title"
-        value={noteTitle}
-        onChange={(e) => setNoteTitle(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Note Subject"
-        value={noteSubject}
-        onChange={(e) => setNoteSubject(e.target.value)}
-      />
-      <textarea
-        placeholder="Note"
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-      />
-      <button onClick={handleAddNote}>Add Note</button>
+      <div className="main-content">
+        <h2>Dashboard</h2>
+        <hr />
+        <button className="button-40" onClick={() => setShowModal(true)}>
+        <i class="fa fa-plus" aria-hidden="true"></i><span> New Note</span>
+        </button>
 
-      {/* Display success message */}
-      {successMessage && <p>{successMessage}</p>}
+        {successMessage && <p>{successMessage}</p>}
+
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add a Note</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group>
+                <Form.Label>Note Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Note Title"
+                  value={noteTitle}
+                  onChange={(e) => setNoteTitle(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Note Subject</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Note Subject"
+                  value={noteSubject}
+                  onChange={(e) => setNoteSubject(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Note</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  placeholder="Note"
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={handleAddNote}>
+              Add Note
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     </div>
   );
 };
