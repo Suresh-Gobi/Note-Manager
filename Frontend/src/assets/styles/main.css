@@ -27,6 +27,12 @@ a:hover {
   text-decoration: none;
 }
 
+.home{
+  color: white;
+ padding-top: 50px;
+ padding-left: 100px;
+}
+
 /* CSS */
 .button-28 {
   appearance: none;
@@ -84,7 +90,6 @@ a:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 6%;
 }
 .from-cards {
   background-color: white;
@@ -155,7 +160,7 @@ a:hover {
 /*Signup*/
 
 /*Alert*/
-.alert-overlay {
+/* .alert-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -170,7 +175,7 @@ a:hover {
 .alert-overlay.active {
   display: block; 
   opacity: 1; 
-}
+} */
 .alert {
   position: fixed;
   background-color: red;
@@ -183,7 +188,19 @@ a:hover {
   transition: opacity 0.3s ease-in-out;
   z-index: 1000; 
   display: none; 
+}
 
+.alert-log{
+  position: fixed;
+  background-color: red;
+  text-align: center;
+  color: white;
+  width: 350px;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 50px 0px 0px -10px;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 1000; 
 }
 
 .close-button {

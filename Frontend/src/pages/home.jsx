@@ -21,7 +21,7 @@ export default function home() {
                   {" "}
                   <Link to="/signup">
                     <button class="button-28" role="button">
-                      Get Start
+                      Get Start <i class="fa fa-arrow-right" aria-hidden="true"></i>
                     </button>
                   </Link>
                 </div>

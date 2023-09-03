@@ -42,9 +42,15 @@ export default function SignupForm() {
 
   return (
     <div className="home-background">
+      <div className="home">
+        <Link to="/" style={{color:'white'}} >
+          <i className="fa fa-home fa-2x" alt="Home"></i>
+        </Link>
+      </div>
       <div className="screen-center">
         <div className="from-cards">
           <h2>Signup</h2>
+
           <hr />
 
           {isErrorVisible && (
