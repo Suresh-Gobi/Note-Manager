@@ -45,7 +45,7 @@ const Login = () => {
           <div className="from-cards">
             <h2>Login</h2>
             <hr />
-            {error && ( // Conditionally render the error alert only if there's an error message
+            {error && (
               <div className="alert-log">
                 <span className="close-button" onClick={() => setError("")}>
                   &times;

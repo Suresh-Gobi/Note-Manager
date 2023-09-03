@@ -97,8 +97,9 @@ export const getAllNotes = () => async (dispatch) => {
         Authorization: `Bearer ${token}`,
       },
     };
+
     // Perform API call to get all notes
-    const response = await axios.get("http://localhost:5000/users/getAllNote");
+    const response = await axios.get("http://localhost:5000/users/getAllNote", config);
 
     // Dispatch the notes to the state
     dispatch({
