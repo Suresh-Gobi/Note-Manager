@@ -46,7 +46,7 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user._id, username: user.username, email: user.email }, 
+      { userId: user._id, username: user.username, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -83,9 +83,8 @@ exports.addNote = async (req, res) => {
 
 exports.getAllNotes = async (req, res) => {
   try {
-    const userId = req.user.userId; 
+    const userId = req.user.userId;
 
-    
     const user = await User.findById(userId);
 
     if (!user) {
@@ -110,19 +109,54 @@ exports.deleteNote = async (req, res) => {
       return res.status(404).json({ message: "User not Found" });
     }
 
-    const noteIndex = user.notes.findById(
+    // Find the index of the note in the user's notes array
+    const noteIndex = user.notes.findIndex(
       (note) => note._id.toString() === noteId
     );
-    if (nodeIndex === -1) {
+
+    if (noteIndex === -1) {
       return res.status(404).json({ message: "Note not found" });
     }
+
+    // Remove the note from the user's notes array
     user.notes.splice(noteIndex, 1);
 
     await user.save();
 
     res.status(200).json({ message: "Note Deleted" });
-  } catch (error)
-  {
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateNote = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const noteId = req.params.noteId;
+    const { noteTitle, noteSubject, note } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const noteToUpdate = user.notes.find((n) => n._id.toString() === noteId);
+
+    if (!noteToUpdate) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    // Update the note details
+    noteToUpdate.noteTitle = noteTitle;
+    noteToUpdate.noteSubject = noteSubject;
+    noteToUpdate.note = note;
+
+    // Save the updated user document
+    await user.save();
+
+    res.status(200).json({ message: "Note updated successfully" });
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };

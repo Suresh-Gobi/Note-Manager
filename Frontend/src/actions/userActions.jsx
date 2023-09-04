@@ -99,7 +99,10 @@ export const getAllNotes = () => async (dispatch) => {
     };
 
     // Perform API call to get all notes
-    const response = await axios.get("http://localhost:5000/users/getAllNote", config);
+    const response = await axios.get(
+      "http://localhost:5000/users/getAllNote",
+      config
+    );
 
     // Dispatch the notes to the state
     dispatch({
@@ -113,6 +116,63 @@ export const getAllNotes = () => async (dispatch) => {
     // dispatch({ type: "GET_ALL_NOTES_FAILURE", error });
   }
 };
+
+export const deleteNote = (noteId) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      throw new Error("Token is missing");
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    await axios.delete(
+      `http://localhost:5000/users/deleteNote/${noteId}`,
+      config
+    );
+
+    // After successful deletion, refetch all notes to update the state
+    dispatch(getAllNotes());
+  } catch (error) {
+    console.error(error);
+    // Handle error, such as displaying an error message to the user
+  }
+};
+
+// Update a note by ID
+// userActions.js
+
+export const updateNote = (noteId, updatedNoteData) => async (dispatch) => {
+  try {
+    // Make an API call to update the note on the server
+    const response = await fetch(`http://localhost:5000/users/updateNote/${noteId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any authentication headers if needed
+      },
+      body: JSON.stringify(updatedNoteData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Note update failed');
+    }
+
+    // Dispatch an action to update the note in the Redux store
+    dispatch({ type: 'UPDATE_NOTE', payload: { noteId, updatedNoteData } });
+
+    return true; // Indicate success
+  } catch (error) {
+    console.error(error);
+    return false; // Indicate failure
+  }
+};
+
 
 
 export const logoutUser = () => (dispatch) => {
