@@ -3,11 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser, getAllNotes, addNote, deleteNote, updateNote } from "../actions/userActions";
 import "../assets/styles/main.css";
 import { Modal, Button, Form } from "react-bootstrap";
-import { createStore, applyMiddleware } from 'redux';
-import rootReducer from '../reducers';
-import thunk from 'redux-thunk';
-
-const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const Dashboard = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -31,6 +26,9 @@ const Dashboard = () => {
     note: "",
     editable: false, // Add editable property
   });
+
+  const [isEditing, setIsEditing] = useState(false); // State to track editing mode
+  const [editableNote, setEditableNote] = useState(null); // State to store the note being edited
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -76,23 +74,28 @@ const Dashboard = () => {
     setShowNoteDetailsModal(true);
   };
 
+  const handleEditNote = (note) => {
+    setEditableNote(note);
+    setIsEditing(true);
+  };
+
   const handleUpdateNote = async () => {
     try {
-      if (noteToDelete) {
+      if (editableNote) {
         const updatedNoteData = {
-          noteTitle: noteDetails.noteTitle,
-          noteSubject: noteDetails.noteSubject,
-          note: noteDetails.note,
+          noteTitle: editableNote.noteTitle,
+          noteSubject: editableNote.noteSubject,
+          note: editableNote.note,
         };
-  
+
         // Dispatch the updateNote action with the updated note details
-        const success = await dispatch(updateNote(noteToDelete._id, updatedNoteData));
-  
+        const success = await dispatch(updateNote(editableNote._id, updatedNoteData));
+
         if (success) {
           // Close the modal and clear the editable flag
-          setShowNoteDetailsModal(false);
-          setNoteDetails({ ...noteDetails, editable: false });
-  
+          setIsEditing(false);
+          setEditableNote(null);
+
           // Optionally, you can fetch all notes again to update the list
           dispatch(getAllNotes());
         } else {
@@ -104,8 +107,6 @@ const Dashboard = () => {
       console.error(error);
     }
   };
-  
-  
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -193,12 +194,23 @@ const Dashboard = () => {
                   </p>
 
                   <div className="note-buttons">
-                    <button className="btn btn-primary" onClick={() => showNoteDetails(note)}>View</button>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => showNoteDetails(note)}
+                    >
+                      View
+                    </button>
                     <button
                       className="btn btn-danger"
-                      onClick={() => showDeleteConfirmation(note)} // Show delete confirmation modal
+                      onClick={() => showDeleteConfirmation(note)}
                     >
                       Delete
+                    </button>
+                    <button
+                      className="btn btn-info"
+                      onClick={() => handleEditNote(note)}
+                    >
+                      Edit
                     </button>
                   </div>
                 </div>
@@ -208,15 +220,19 @@ const Dashboard = () => {
         )}
 
         {/* Delete Confirmation Modal */}
-        <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal
+          show={showDeleteModal}
+          onHide={() => setShowDeleteModal(false)}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Confirm Delete</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            Are you sure you want to delete this note?
-          </Modal.Body>
+          <Modal.Body>Are you sure you want to delete this note?</Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteModal(false)}
+            >
               Cancel
             </Button>
             <Button variant="danger" onClick={handleDeleteNote}>
@@ -226,7 +242,10 @@ const Dashboard = () => {
         </Modal>
 
         {/* Note Details Modal */}
-        <Modal show={showNoteDetailsModal} onHide={() => setShowNoteDetailsModal(false)}>
+        <Modal
+          show={showNoteDetailsModal}
+          onHide={() => setShowNoteDetailsModal(false)}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Note Details</Modal.Title>
           </Modal.Header>
@@ -237,7 +256,9 @@ const Dashboard = () => {
                 type="text"
                 value={noteDetails.noteTitle}
                 readOnly={!noteDetails.editable}
-                onChange={(e) => setNoteDetails({ ...noteDetails, noteTitle: e.target.value })}
+                onChange={(e) =>
+                  setNoteDetails({ ...noteDetails, noteTitle: e.target.value })
+                }
               />
             </Form.Group>
             <Form.Group>
@@ -246,7 +267,12 @@ const Dashboard = () => {
                 type="text"
                 value={noteDetails.noteSubject}
                 readOnly={!noteDetails.editable}
-                onChange={(e) => setNoteDetails({ ...noteDetails, noteSubject: e.target.value })}
+                onChange={(e) =>
+                  setNoteDetails({
+                    ...noteDetails,
+                    noteSubject: e.target.value,
+                  })
+                }
               />
             </Form.Group>
             <Form.Group>
@@ -256,25 +282,76 @@ const Dashboard = () => {
                 rows={3}
                 value={noteDetails.note}
                 readOnly={!noteDetails.editable}
-                onChange={(e) => setNoteDetails({ ...noteDetails, note: e.target.value })}
+                onChange={(e) =>
+                  setNoteDetails({ ...noteDetails, note: e.target.value })
+                }
               />
             </Form.Group>
           </Modal.Body>
+        </Modal>
+
+        {/* Edit Note Modal */}
+        <Modal
+          show={isEditing}
+          onHide={() => {
+            setIsEditing(false);
+            setEditableNote(null);
+          }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Note</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group>
+                <Form.Label>Note Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={editableNote?.noteTitle || ""}
+                  onChange={(e) =>
+                    setEditableNote({
+                      ...editableNote,
+                      noteTitle: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Note Subject</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={editableNote?.noteSubject || ""}
+                  onChange={(e) =>
+                    setEditableNote({
+                      ...editableNote,
+                      noteSubject: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Note</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={editableNote?.note || ""}
+                  onChange={(e) =>
+                    setEditableNote({
+                      ...editableNote,
+                      note: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
           <Modal.Footer>
-            {noteDetails.editable ? (
-              <>
-                <Button variant="primary" onClick={handleUpdateNote}>
-                  Update
-                </Button>
-                <Button variant="secondary" onClick={() => setShowNoteDetailsModal(false)}>
-                  Cancel
-                </Button>
-              </>
-            ) : (
-              <Button variant="secondary" onClick={() => setNoteDetails({ ...noteDetails, editable: true })}>
-                Edit
-              </Button>
-            )}
+            <Button variant="secondary" onClick={() => setIsEditing(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleUpdateNote}>
+              Update
+            </Button>
           </Modal.Footer>
         </Modal>
       </div>

@@ -147,31 +147,44 @@ export const deleteNote = (noteId) => async (dispatch) => {
 // Update a note by ID
 // userActions.js
 
+// Add an action for updating a note
 export const updateNote = (noteId, updatedNoteData) => async (dispatch) => {
   try {
-    // Make an API call to update the note on the server
-    const response = await fetch(`http://localhost:5000/users/updateNote/${noteId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        // Add any authentication headers if needed
-      },
-      body: JSON.stringify(updatedNoteData),
-    });
+    const token = localStorage.getItem("token");
 
-    if (!response.ok) {
-      throw new Error('Note update failed');
+    // Ensure the token is available before making the request
+    if (!token) {
+      throw new Error("Token is missing");
     }
 
-    // Dispatch an action to update the note in the Redux store
-    dispatch({ type: 'UPDATE_NOTE', payload: { noteId, updatedNoteData } });
+    // Set up the request headers with the token
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
 
-    return true; // Indicate success
+    // Perform API call to update the note
+    const response = await axios.put(
+      `http://localhost:5000/users/updateNote/${noteId}`,
+      updatedNoteData,
+      config
+    );
+
+    if (response.status === 200) {
+      // Note updated successfully
+      dispatch({ type: "UPDATE_NOTE_SUCCESS" });
+    } else {
+      // Handle update failure
+      dispatch({ type: "UPDATE_NOTE_FAILURE" });
+    }
   } catch (error) {
     console.error(error);
-    return false; // Indicate failure
+    // Handle error, such as displaying an error message to the user
+    dispatch({ type: "UPDATE_NOTE_FAILURE" });
   }
 };
+
 
 
 
