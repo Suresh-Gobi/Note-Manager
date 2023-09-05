@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { logoutUser, getAllNotes, addNote, deleteNote, updateNote } from "../actions/userActions";
+import {
+  logoutUser,
+  getAllNotes,
+  addNote,
+  deleteNote,
+  updateNote,
+} from "../actions/userActions";
 import "../assets/styles/main.css";
 import { Modal, Button, Form } from "react-bootstrap";
 
@@ -36,12 +42,18 @@ const Dashboard = () => {
 
   const handleAddNote = async () => {
     try {
-      const addedNote = await dispatch(addNote({ noteTitle, noteSubject, note }));
+      const addedNote = await dispatch(
+        addNote({ noteTitle, noteSubject, note })
+      );
       setSuccessMessage("Note Added Successfully");
 
       setNoteTitle("");
       setNoteSubject("");
       setNote("");
+
+      setShowModal(false);
+
+      dispatch(getAllNotes());
     } catch (error) {
       console.error(error);
     }
@@ -87,17 +99,29 @@ const Dashboard = () => {
           noteSubject: editableNote.noteSubject,
           note: editableNote.note,
         };
-
+  
         // Dispatch the updateNote action with the updated note details
-        const success = await dispatch(updateNote(editableNote._id, updatedNoteData));
-
+        const success = await dispatch(
+          updateNote(editableNote._id, updatedNoteData)
+        );
+  
         if (success) {
           // Close the modal and clear the editable flag
           setIsEditing(false);
           setEditableNote(null);
-
+  
           // Optionally, you can fetch all notes again to update the list
           dispatch(getAllNotes());
+  
+          // Display the "Note updated successfully" message
+          setSuccessMessage("Note Updated Successfully");
+  
+          // Close the update modal explicitly
+          setShowNoteDetailsModal(false);
+  
+          setTimeout(() => {
+            setSuccessMessage("");
+          }, 2000);
         } else {
           // Handle update failure (show an error message, if needed)
           console.error("Update failed");
@@ -107,6 +131,7 @@ const Dashboard = () => {
       console.error(error);
     }
   };
+  
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -220,10 +245,7 @@ const Dashboard = () => {
         )}
 
         {/* Delete Confirmation Modal */}
-        <Modal
-          show={showDeleteModal}
-          onHide={() => setShowDeleteModal(false)}
-        >
+        <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Confirm Delete</Modal.Title>
           </Modal.Header>
