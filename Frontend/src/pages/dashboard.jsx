@@ -41,6 +41,21 @@ const Dashboard = () => {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
   const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
 
+  const [notesPerPage] = useState(3); // Number of notes to display per page
+  const [currentPage, setCurrentPage] = useState(1);
+
+
+
+  // Function to handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+    // Calculate the range of notes to display
+    const indexOfLastNote = currentPage * notesPerPage;
+    const indexOfFirstNote = indexOfLastNote - notesPerPage;
+    const currentNotes = notes.slice(indexOfFirstNote, indexOfLastNote);
+
   // Function to update isMobileView based on screen width
   const updateIsMobileView = () => {
     setIsMobileView(window.innerWidth <= 768);
@@ -176,12 +191,16 @@ const Dashboard = () => {
           <i className="fa fa-times" aria-hidden="true"></i>
         </button>
         {/* Sidebar content */}
-        <h2>Note-Manager</h2>
-        <hr />
-        <h5>Welcome, {username}!</h5>
-        <button className="btn btn-danger" onClick={handleLogout}>
-          Logout
-        </button>
+        <div className="sidebar-content">
+          <h2>Note-Manager</h2>
+          <hr />
+          <h5>Welcome, {username}!</h5>
+          <div className="logout-button-container">
+            <button className="btn btn-danger" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        </div>
         {/* ... */}
       </div>
 
@@ -190,22 +209,23 @@ const Dashboard = () => {
       </div> */}
 
       <div className="main-content">
-        <h2>Dashboard</h2>
+        <div className="dashboard-header">
+          <h2>Dashboard</h2>
+
+          <button
+            className="button-40"
+            style={{ marginLeft: "auto" }}
+            onClick={() => setShowModal(true)}
+          >
+            <i className="fa fa-plus" aria-hidden="true"></i>
+            <span> New Note</span>
+          </button>
+        </div>
         <hr />
-        <button className="button-40" onClick={() => setShowModal(true)}>
-          <i className="fa fa-plus" aria-hidden="true"></i>
-          <span> New Note</span>
-        </button>
 
         {isSuccessMessageVisible && (
           <div className="success-message">
             <p className="success-text">{successMessage}</p>
-          </div>
-        )}
-
-        {isSuccessMessageVisible && (
-          <div className="success-message">
-            <p className="success-text">{updateSuccessMessage}</p>
           </div>
         )}
 
@@ -256,45 +276,38 @@ const Dashboard = () => {
           </Modal.Footer>
         </Modal>
 
-        {notes.length > 0 && (
-          <div>
-            <h3>Your Notes:</h3>
-            <div className="notes">
-              {notes
-                .slice()
-                .reverse()
-                .map((note) => (
-                  <div key={note._id} className="card note-card note-card-margin">
-                    <p>
-                      <strong>Title: </strong> {note.noteTitle}
-                      <br />
-                    </p>
+        {currentNotes.map((note) => (
+            <div key={note._id} className="card note-card note-card-margin">
+              <p>
+                <strong>Title: </strong> {note.noteTitle}
+                <br />
+              </p>
 
-                    <div className="note-buttons">
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => showNoteDetails(note)}
-                      >
-                        View
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => showDeleteConfirmation(note)}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className="btn btn-info"
-                        onClick={() => handleEditNote(note)}
-                      >
-                        Edit
-                      </button>
-                    </div>
-                  </div>
-                ))}
+              <div className="note-buttons" style={{ marginLeft: "auto" }}>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => showNoteDetails(note)}
+                  style={{ margin: "0 5px" }}
+                >
+                  <i className="fa fa-eye" aria-hidden="true"></i>
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => showDeleteConfirmation(note)}
+                  style={{ margin: "0 5px" }}
+                >
+                  <i className="fa fa-trash" aria-hidden="true"></i>
+                </button>
+                <button
+                  className="btn btn-info"
+                  onClick={() => handleEditNote(note)}
+                  style={{ margin: "0 5px" }}
+                >
+                  <i className="fa fa-pencil" aria-hidden="true"></i>
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          ))}
 
         {/* Delete Confirmation Modal */}
         <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
@@ -428,6 +441,53 @@ const Dashboard = () => {
             </Button>
           </Modal.Footer>
         </Modal>
+        {/* Pagination */}
+        <nav aria-label="Page navigation example">
+          <ul className="pagination">
+            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+              <a
+                className="page-link"
+                href="#"
+                onClick={() => handlePageChange(currentPage - 1)}
+              >
+                Previous
+              </a>
+            </li>
+            {Array.from({ length: Math.ceil(notes.length / notesPerPage) }).map(
+              (_, index) => (
+                <li
+                  key={index}
+                  className={`page-item ${
+                    currentPage === index + 1 ? "active" : ""
+                  }`}
+                >
+                  <a
+                    className="page-link"
+                    href="#"
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </a>
+                </li>
+              )
+            )}
+            <li
+              className={`page-item ${
+                currentPage === Math.ceil(notes.length / notesPerPage)
+                  ? "disabled"
+                  : ""
+              }`}
+            >
+              <a
+                className="page-link"
+                href="#"
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                Next
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   );

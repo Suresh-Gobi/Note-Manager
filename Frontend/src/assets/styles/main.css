@@ -189,7 +189,8 @@ a:hover {
   z-index: 1000;
   display: none;
 }
-.success-message, .update-success-message{
+.success-message,
+.update-success-message {
   background-color: rgb(7, 42, 72);
   position: fixed;
   border-radius: 10px;
@@ -202,10 +203,11 @@ a:hover {
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-left: 20%; 
+  margin-left: 20%;
   margin-top: -80px;
 }
-.succes-text, .update-success-text{
+.succes-text,
+.update-success-text {
   padding: 20px;
   padding-top: 30px;
   text-align: center;
@@ -256,6 +258,14 @@ a:hover {
   /* padding: 20px; */
   height: 100vh;
 }
+.dashboard-header {
+  display: flex;
+  align-items: center; /* Vertically align items */
+}
+
+.dashboard-header h2 {
+  margin-right: 10px; /* Adjust the margin as needed to separate text and button */
+}
 
 .note-card-margin {
   margin-top: 10px; /* Adjust the margin-top value as needed */
@@ -287,7 +297,7 @@ a:hover {
 /* Main Content */
 .main-content {
   flex: 1;
-  padding: 20px;
+  padding: 70px;
 }
 
 input[type="text"],
@@ -352,6 +362,13 @@ button {
 .note-card {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: 20px;
+  width: 100%;
+}
+.notes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 /**get notes/
 /*Dashboard End*/
@@ -361,6 +378,7 @@ button {
 .close-button {
   display: none;
 } */
+
 @media (min-width: 769px) {
   .close-button {
     display: none;
@@ -386,19 +404,34 @@ button {
     cursor: pointer;
   }
   .sidebar {
-    display: block; /* Show the sidebar */
-    position: absolute;
+    display: flex;
+    flex-direction: column;
+    position: relative;
     top: 0;
-    left: -250px; /* Hide the sidebar off-screen */
+    left: -250px;
     width: 250px;
     height: 100%;
     background-color: #111827;
     color: white;
     z-index: 100;
-    transition: left 0.3s ease-in-out; /* Add smooth transition effect */
+    transition: left 0.3s ease-in-out;
   }
 
-  .show-sidebar {
-    left: 0; /* Show the sidebar on-screen */
+  .sidebar-content {
+    margin-top: 20px;
+    padding: 10px;
+    flex-grow: 1;
   }
+
+  .logout-button-container {
+    position: absolute;
+    bottom: 0;
+    left: 0; 
+    width: 100%;
+    text-align: center;
+
+}
+.show-sidebar {
+  left: 0;
+}
 }
