@@ -30,7 +30,7 @@ const Dashboard = () => {
     noteTitle: "",
     noteSubject: "",
     note: "",
-    editable: false, // Add editable property
+    editable: false,
   });
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -39,6 +39,7 @@ const Dashboard = () => {
   const [updateSuccessMessage, setUpdateSuccessMessage] = useState(""); // Define updateSuccessMessage state
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
+  const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
 
   // Function to update isMobileView based on screen width
   const updateIsMobileView = () => {
@@ -58,6 +59,7 @@ const Dashboard = () => {
         addNote({ noteTitle, noteSubject, note })
       );
       setSuccessMessage("Note Added Successfully");
+      setIsSuccessMessageVisible(true);
 
       setNoteTitle("");
       setNoteSubject("");
@@ -66,6 +68,12 @@ const Dashboard = () => {
       setShowModal(false);
 
       dispatch(getAllNotes());
+
+      // Set a timer to hide the success message after 2 seconds
+      setTimeout(() => {
+        setSuccessMessage("");
+        setIsSuccessMessageVisible(false);
+      }, 2000);
     } catch (error) {
       console.error(error);
     }
@@ -75,8 +83,8 @@ const Dashboard = () => {
     try {
       if (noteToDelete) {
         await dispatch(deleteNote(noteToDelete._id));
-        setNoteToDelete(null); // Clear the note to delete
-        setShowDeleteModal(false); // Close the delete confirmation modal
+        setNoteToDelete(null);
+        setShowDeleteModal(false);
       }
     } catch (error) {
       console.error(error);
@@ -136,12 +144,10 @@ const Dashboard = () => {
           console.error(
             "Update failed. Please check your server or API response."
           );
-          // You can handle the error or display a message to the user
         }
       }
     } catch (error) {
       console.error("An error occurred during the update:", error);
-      // Handle the error or display a message to the user
     }
   };
 
@@ -191,7 +197,17 @@ const Dashboard = () => {
           <span> New Note</span>
         </button>
 
-        {successMessage && <p>{successMessage}</p>}
+        {isSuccessMessageVisible && (
+          <div className="success-message">
+            <p className="success-text">{successMessage}</p>
+          </div>
+        )}
+
+        {isSuccessMessageVisible && (
+          <div className="success-message">
+            <p className="success-text">{updateSuccessMessage}</p>
+          </div>
+        )}
 
         {updateSuccessMessage && (
           <div className="update-success-message">{updateSuccessMessage}</div>
@@ -244,35 +260,38 @@ const Dashboard = () => {
           <div>
             <h3>Your Notes:</h3>
             <div className="notes">
-              {notes.map((note) => (
-                <div key={note._id} className="card note-card">
-                  <p>
-                    <strong>Title: </strong> {note.noteTitle}
-                    <br />
-                  </p>
+              {notes
+                .slice()
+                .reverse()
+                .map((note) => (
+                  <div key={note._id} className="card note-card note-card-margin">
+                    <p>
+                      <strong>Title: </strong> {note.noteTitle}
+                      <br />
+                    </p>
 
-                  <div className="note-buttons">
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => showNoteDetails(note)}
-                    >
-                      View
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => showDeleteConfirmation(note)}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      className="btn btn-info"
-                      onClick={() => handleEditNote(note)}
-                    >
-                      Edit
-                    </button>
+                    <div className="note-buttons">
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => showNoteDetails(note)}
+                      >
+                        View
+                      </button>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => showDeleteConfirmation(note)}
+                      >
+                        Delete
+                      </button>
+                      <button
+                        className="btn btn-info"
+                        onClick={() => handleEditNote(note)}
+                      >
+                        Edit
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         )}
