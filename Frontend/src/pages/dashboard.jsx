@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   logoutUser,
   getAllNotes,
@@ -44,6 +45,8 @@ const Dashboard = () => {
   const [notesPerPage] = useState(3); // Number of notes to display per page
   const [currentPage, setCurrentPage] = useState(1);
 
+  const navigate = useNavigate();
+
   // Function to handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -64,6 +67,7 @@ const Dashboard = () => {
   };
   const handleLogout = () => {
     dispatch(logoutUser());
+    navigate("/login");
   };
 
   const handleAddNote = async () => {
@@ -114,7 +118,7 @@ const Dashboard = () => {
       noteTitle: note.noteTitle,
       noteSubject: note.noteSubject,
       note: note.note,
-      editable: false, // Initialize as view mode
+      editable: false,
     });
     setShowNoteDetailsModal(true);
   };
@@ -195,7 +199,7 @@ const Dashboard = () => {
           <h5>Welcome, {username}!</h5>
           <div className="logout-button-container">
             <button className="btn btn-danger" onClick={handleLogout}>
-              Logout
+              Logout <i class="fa fa-sign-out" aria-hidden="true"></i>
             </button>
           </div>
         </div>
