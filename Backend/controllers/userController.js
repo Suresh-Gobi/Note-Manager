@@ -147,16 +147,20 @@ exports.updateNote = async (req, res) => {
       return res.status(404).json({ message: "Note not found" });
     }
 
-    // Update the note details
+    // Update the note details immediately
     noteToUpdate.noteTitle = noteTitle;
     noteToUpdate.noteSubject = noteSubject;
     noteToUpdate.note = note;
 
-    // Save the updated user document
-    await user.save();
-
+    // Send a response indicating success
     res.status(200).json({ message: "Note updated successfully" });
+
+    // Save the updated user document asynchronously
+    await user.save();
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    // Handle errors and send an appropriate error response
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
+

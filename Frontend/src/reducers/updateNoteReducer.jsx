@@ -1,6 +1,7 @@
+// updateNoteReducer.js
 const initialState = {
-  updatingNote: false, // Flag to indicate if a note is being updated
-  error: null,
+  updatingNote: false,
+  updateError: null, // Change to updateError
 };
 
 const updateNoteReducer = (state = initialState, action) => {
@@ -9,19 +10,19 @@ const updateNoteReducer = (state = initialState, action) => {
       return {
         ...state,
         updatingNote: true,
-        error: null,
+        updateError: null,
       };
     case "UPDATE_NOTE_SUCCESS":
       return {
         ...state,
         updatingNote: false,
-        error: null,
+        updateError: null,
       };
     case "UPDATE_NOTE_FAILURE":
       return {
         ...state,
         updatingNote: false,
-        error: "Note update failed",
+        updateError: "Note update failed", // Update error message
       };
     default:
       return state;

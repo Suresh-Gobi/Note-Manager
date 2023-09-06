@@ -152,19 +152,16 @@ export const updateNote = (noteId, updatedNoteData) => async (dispatch) => {
   try {
     const token = localStorage.getItem("token");
 
-    // Ensure the token is available before making the request
     if (!token) {
       throw new Error("Token is missing");
     }
 
-    // Set up the request headers with the token
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
 
-    // Perform API call to update the note
     const response = await axios.put(
       `http://localhost:5000/users/updateNote/${noteId}`,
       updatedNoteData,
@@ -174,14 +171,15 @@ export const updateNote = (noteId, updatedNoteData) => async (dispatch) => {
     if (response.status === 200) {
       // Note updated successfully
       dispatch({ type: "UPDATE_NOTE_SUCCESS" });
+      return true; // Indicate success
     } else {
       // Handle update failure
-      dispatch({ type: "UPDATE_NOTE_FAILURE" });
+      console.error("Update failed");
+      return false; // Indicate failure
     }
   } catch (error) {
-    console.error(error);
-    // Handle error, such as displaying an error message to the user
-    dispatch({ type: "UPDATE_NOTE_FAILURE" });
+    console.error("An error occurred during the update:", error);
+    return false; // Indicate failure
   }
 };
 

@@ -33,9 +33,21 @@ const Dashboard = () => {
     editable: false, // Add editable property
   });
 
-  const [isEditing, setIsEditing] = useState(false); // State to track editing mode
-  const [editableNote, setEditableNote] = useState(null); // State to store the note being edited
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false); // Define isEditing state
+  const [editableNote, setEditableNote] = useState(null); // Define editableNote state
+  const [updateSuccessMessage, setUpdateSuccessMessage] = useState(""); // Define updateSuccessMessage state
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
 
+  // Function to update isMobileView based on screen width
+  const updateIsMobileView = () => {
+    setIsMobileView(window.innerWidth <= 768);
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
   const handleLogout = () => {
     dispatch(logoutUser());
   };
@@ -89,6 +101,9 @@ const Dashboard = () => {
   const handleEditNote = (note) => {
     setEditableNote(note);
     setIsEditing(true);
+
+    // Open the update modal
+    setIsUpdateModalOpen(true);
   };
 
   const handleUpdateNote = async () => {
@@ -99,41 +114,39 @@ const Dashboard = () => {
           noteSubject: editableNote.noteSubject,
           note: editableNote.note,
         };
-  
-        // Dispatch the updateNote action with the updated note details
+
         const success = await dispatch(
           updateNote(editableNote._id, updatedNoteData)
         );
-  
+
         if (success) {
-          // Close the modal and clear the editable flag
           setIsEditing(false);
           setEditableNote(null);
-  
-          // Optionally, you can fetch all notes again to update the list
+
           dispatch(getAllNotes());
-  
-          // Display the "Note updated successfully" message
-          setSuccessMessage("Note Updated Successfully");
-  
-          // Close the update modal explicitly
-          setShowNoteDetailsModal(false);
-  
+
+          setUpdateSuccessMessage("Note Updated Successfully");
+
+          setIsUpdateModalOpen(false);
+
           setTimeout(() => {
-            setSuccessMessage("");
+            setUpdateSuccessMessage("");
           }, 2000);
         } else {
-          // Handle update failure (show an error message, if needed)
-          console.error("Update failed");
+          console.error(
+            "Update failed. Please check your server or API response."
+          );
+          // You can handle the error or display a message to the user
         }
       }
     } catch (error) {
-      console.error(error);
+      console.error("An error occurred during the update:", error);
+      // Handle the error or display a message to the user
     }
   };
-  
 
   useEffect(() => {
+    window.addEventListener("resize", updateIsMobileView);
     if (isAuthenticated) {
       dispatch(getAllNotes());
     }
@@ -145,14 +158,30 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <div className="sidebar">
+      {isMobileView && (
+        <button className="toggle-sidebar-button" onClick={toggleSidebar}>
+          <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+        </button>
+      )}
+
+      {/* Sidebar */}
+      <div className={`sidebar ${isSidebarVisible ? "show-sidebar" : ""}`}>
+        <button className="close-button" onClick={toggleSidebar}>
+          <i className="fa fa-times" aria-hidden="true"></i>
+        </button>
+        {/* Sidebar content */}
         <h2>Note-Manager</h2>
         <hr />
         <h5>Welcome, {username}!</h5>
         <button className="btn btn-danger" onClick={handleLogout}>
           Logout
         </button>
+        {/* ... */}
       </div>
+
+      {/* <div className="sidebar">
+        
+      </div> */}
 
       <div className="main-content">
         <h2>Dashboard</h2>
@@ -163,6 +192,10 @@ const Dashboard = () => {
         </button>
 
         {successMessage && <p>{successMessage}</p>}
+
+        {updateSuccessMessage && (
+          <div className="update-success-message">{updateSuccessMessage}</div>
+        )}
 
         <Modal show={showModal} onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
@@ -314,11 +347,8 @@ const Dashboard = () => {
 
         {/* Edit Note Modal */}
         <Modal
-          show={isEditing}
-          onHide={() => {
-            setIsEditing(false);
-            setEditableNote(null);
-          }}
+          show={isUpdateModalOpen}
+          onHide={() => setIsUpdateModalOpen(false)}
         >
           <Modal.Header closeButton>
             <Modal.Title>Edit Note</Modal.Title>
@@ -368,7 +398,10 @@ const Dashboard = () => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setIsEditing(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setIsUpdateModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button variant="primary" onClick={handleUpdateNote}>

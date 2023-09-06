@@ -1,3 +1,4 @@
+// reducers/index.js
 import { combineReducers } from "redux";
 import userReducer from "./userReducer";
 import authReducer from "./authReducer";

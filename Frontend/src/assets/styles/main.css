@@ -1,6 +1,6 @@
 .home-background {
   background-image: url("../images/stacked-waves-haikei.svg");
-  background-size: cover; 
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   height: 100vh;
@@ -27,10 +27,10 @@ a:hover {
   text-decoration: none;
 }
 
-.home{
+.home {
   color: white;
- padding-top: 50px;
- padding-left: 100px;
+  padding-top: 50px;
+  padding-left: 100px;
 }
 
 /* CSS */
@@ -98,7 +98,7 @@ a:hover {
   border-radius: 10px;
   padding: 30px;
 }
-.from-cards h2{
+.from-cards h2 {
   text-align: center;
 }
 .button-29 {
@@ -145,15 +145,15 @@ a:hover {
   box-shadow: none;
   transform: translateY(0);
 }
-.form-group{
+.form-group {
   padding-top: 20px;
 }
-.button-center{
+.button-center {
   padding-top: 20px;
   display: grid;
   place-items: center;
 }
-.account{
+.account {
   padding-top: 5px;
   text-align: center;
 }
@@ -186,11 +186,11 @@ a:hover {
   border-radius: 5px;
   margin: 50px 0px 0px -10px;
   transition: opacity 0.3s ease-in-out;
-  z-index: 1000; 
-  display: none; 
+  z-index: 1000;
+  display: none;
 }
 
-.alert-log{
+.alert-log {
   position: fixed;
   background-color: red;
   text-align: center;
@@ -200,7 +200,7 @@ a:hover {
   border-radius: 5px;
   margin: 50px 0px 0px -10px;
   transition: opacity 0.3s ease-in-out;
-  z-index: 1000; 
+  z-index: 1000;
 }
 
 .close-button {
@@ -231,8 +231,8 @@ a:hover {
 /* Dashboard Container */
 .dashboard-container {
   display: flex;
-  background-color: rgb(255, 255, 255); 
-  color: rgb(54, 54, 54); 
+  background-color: rgb(255, 255, 255);
+  color: rgb(54, 54, 54);
   /* padding: 20px; */
   height: 100vh;
 }
@@ -240,31 +240,29 @@ a:hover {
 /* Sidebar Styles */
 .sidebar {
   color: white;
-  width: 20%; 
+  width: 20%;
   padding: 20px;
   background-color: rgb(18, 18, 18);
-  border-right: 1px solid white; 
+  border-right: 1px solid white;
+  position: relative;
 }
 
 .sidebar h2 {
   font-size: 24px;
 }
 
-.sidebar h5{
+.sidebar h5 {
   font-weight: 300;
 }
 
-.sidebar .btn-danger{
-  /* margin-left: 50px; */
+/* .sidebar .btn-danger{
   margin-top: 400px;
   width: 220px;
-}
-
-
+} */
 
 /* Main Content */
 .main-content {
-  flex: 1; 
+  flex: 1;
   padding: 20px;
 }
 
@@ -276,7 +274,7 @@ textarea {
 }
 
 button {
-  background-color: #007bff; 
+  background-color: #007bff;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -287,21 +285,23 @@ button {
 .button-40 {
   background-color: #111827;
   border: 1px solid transparent;
-  border-radius: .75rem;
+  border-radius: 0.75rem;
   box-sizing: border-box;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
   flex: 0 0 auto;
-  font-family: "Inter var",ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: "Inter var", ui-sans-serif, system-ui, -apple-system, system-ui,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-weight: 600;
   line-height: 1.5rem;
-  padding: .75rem 1.2rem;
+  padding: 0.75rem 1.2rem;
   text-align: center;
-  text-decoration: none #6B7280 solid;
+  text-decoration: none #6b7280 solid;
   text-decoration-thickness: auto;
-  transition-duration: .2s;
-  transition-property: background-color,border-color,color,fill,stroke;
-  transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
@@ -320,14 +320,61 @@ button {
 
 @media (min-width: 768px) {
   .button-40 {
-    padding: .75rem 1.5rem;
+    padding: 0.75rem 1.5rem;
   }
 }
 
 /*get notes*/
-.note-card{
+.note-card {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: 20px;
 }
 /**get notes/
 /*Dashboard End*/
+/* .toggle-sidebar-button {
+  display: none;
+}
+.close-button {
+  display: none;
+} */
+@media (min-width: 769px) {
+  .close-button {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .toggle-sidebar-button {
+    position: fixed;
+    background-color: white;
+    color: #111827;
+    padding: 20px;
+    border: none;
+    cursor: pointer;
+  }
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .sidebar {
+    display: block; /* Show the sidebar */
+    position: absolute;
+    top: 0;
+    left: -250px; /* Hide the sidebar off-screen */
+    width: 250px;
+    height: 100%;
+    background-color: #111827;
+    color: white;
+    z-index: 100;
+    transition: left 0.3s ease-in-out; /* Add smooth transition effect */
+  }
+
+  .show-sidebar {
+    left: 0; /* Show the sidebar on-screen */
+  }
+}
