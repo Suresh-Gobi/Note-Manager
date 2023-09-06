@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   logoutUser,
   getAllNotes,
@@ -197,6 +197,10 @@ const Dashboard = () => {
           <h2>Note-Manager</h2>
           <hr />
           <h5>Welcome, {username}!</h5>
+          <div className="Developer-credits">
+          Developed by 
+            <Link to="https://sureshgobi.web.app/" target="_blank"><p>Suresh Gobi</p></Link>
+          </div>
           <div className="logout-button-container">
             <button className="btn btn-danger" onClick={handleLogout}>
               Logout <i class="fa fa-sign-out" aria-hidden="true"></i>

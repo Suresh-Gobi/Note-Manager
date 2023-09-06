@@ -370,6 +370,15 @@ button {
   align-items: center;
   justify-content: center;
 }
+.Developer-credits{
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 100px;
+  left: 0;
+  width: 100%;
+  font-size: 11px;
+  text-align: center;
+}
 /**get notes/
 /*Dashboard End*/
 /* .toggle-sidebar-button {
@@ -385,6 +394,14 @@ button {
   }
 }
 @media (max-width: 768px) {
+  .sidebar {
+    color: white;
+    width: 20%;
+    padding: 20px;
+    background-color: rgb(18, 18, 18);
+    border-right: 1px solid white;
+    position: absolute;
+  }
   .toggle-sidebar-button {
     position: fixed;
     background-color: white;
@@ -406,7 +423,6 @@ button {
   .sidebar {
     display: flex;
     flex-direction: column;
-    position: relative;
     top: 0;
     left: -250px;
     width: 250px;
@@ -423,16 +439,24 @@ button {
     flex-grow: 1;
   }
 
-  .logout-button-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-  }
+
   .show-sidebar {
     left: 0;
   }
+
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+  }
+}
+.logout-button-container {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 60px;
+  left: 0;
+  width: 100%;
+  text-align: center;
 }
 /*Pagination*/
 .pagination-container {
