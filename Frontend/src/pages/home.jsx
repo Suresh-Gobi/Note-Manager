@@ -15,18 +15,17 @@ export default function home() {
             </h6>
           </div>
           <div className="button-get">
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  {" "}
+            <div className="container">
+              <div className="row">
+                <div className="col-sm text-center">
                   <Link to="/signup">
                     <button class="button-28" role="button">
-                      Get Start <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                      Get Start{" "}
+                      <i class="fa fa-arrow-right" aria-hidden="true"></i>
                     </button>
                   </Link>
                 </div>
-                <div class="col-sm">
-                  {" "}
+                <div className="col-sm text-center">
                   <Link to="/login">
                     <button class="button-28" role="button">
                       Login

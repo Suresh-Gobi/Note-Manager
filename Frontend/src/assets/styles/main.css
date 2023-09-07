@@ -15,6 +15,7 @@
   text-align: center;
   font-weight: 800;
   color: white;
+  padding-top: 80px;
 }
 .home-title h6 {
   text-align: center;
@@ -34,15 +35,24 @@ a:hover {
   padding-left: 100px;
 }
 
+.button-get {
+  margin-left: 150px;
+  margin-right: 150px;
+  margin-top: 50px;
+}
+
 @media (max-width: 768px) {
   .home-title h6 {
     margin-left: 50px;
     margin-right: 50px;
   }
   .button-get {
-    margin-left: none;
-    margin-right: none;
-    margin-top: 100px;
+    margin-left: -30px;
+    margin-right: -30px;
+    margin-top: 40px;
+  }
+  .button-get .col-sm {
+    padding-top: 10px;
   }
 }
 
@@ -78,6 +88,7 @@ a:hover {
   touch-action: manipulation;
   width: 70%;
   will-change: transform;
+  margin-right: 10px;
 }
 
 .button-28:disabled {

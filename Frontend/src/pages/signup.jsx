@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signup } from "../actions/userActions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
 import "../assets/styles/main.css";
@@ -11,7 +11,9 @@ export default function SignupForm() {
   const error = useSelector((state) => state.user.error);
   const [isLoading, setIsLoading] = useState(false);
   const [isErrorVisible, setIsErrorVisible] = useState(false);
-
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
     username: "",
     email: "",
@@ -21,20 +23,28 @@ export default function SignupForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    await dispatch(signup(userData));
-    setIsLoading(false);
+    await dispatch(signup(userData))
+      .then(() => {
+        setIsSuccessVisible(true); 
+        setIsLoading(false);
+        navigate("/login");
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        setIsErrorVisible(true);
+        let errorMessage = error ? error.message : "";
+        if (error && error.message === "Request failed with status code 404") {
+          errorMessage = "Username already exists";
+        }
+        setErrorMessage(errorMessage);
+      });
   };
 
   useEffect(() => {
     setIsLoading(false);
     setIsErrorVisible(!!error);
+    setIsSuccessVisible(!!error === false);
   }, [error]);
-
-  let errorMessage = error ? error.message : "";
-
-  if (error && error.message === "Request failed with status code 404") {
-    errorMessage = "Username already exists";
-  }
 
   const handleCloseError = () => {
     setIsErrorVisible(false);
@@ -43,7 +53,7 @@ export default function SignupForm() {
   return (
     <div className="home-background">
       <div className="home">
-        <Link to="/" style={{color:'white'}} >
+        <Link to="/" style={{ color: "white" }}>
           <i className="fa fa-home fa-2x" alt="Home"></i>
         </Link>
       </div>
@@ -59,6 +69,13 @@ export default function SignupForm() {
                 &times;
               </span>
               <p>{errorMessage}</p>
+            </div>
+          )}
+
+          {isSuccessVisible && (
+            <div className="alert success">
+              <p>Account created successfully!</p>
+              <Link to="/login">Go to Login</Link>
             </div>
           )}
 
