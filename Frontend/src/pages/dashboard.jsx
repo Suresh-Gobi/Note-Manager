@@ -13,19 +13,17 @@ import { Modal, Button, Form } from "react-bootstrap";
 
 const Dashboard = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const user = useSelector((state) => state.auth.user);
   const notes = useSelector((state) => state.getNote.notes);
   const dispatch = useDispatch();
-  const email = localStorage.getItem("email");
   const username = localStorage.getItem("username");
 
   const [noteTitle, setNoteTitle] = useState("");
   const [noteSubject, setNoteSubject] = useState("");
   const [note, setNote] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [showModal, setShowModal] = useState(false); // State for the add note modal
-  const [showDeleteModal, setShowDeleteModal] = useState(false); // State for the delete confirmation modal
-  const [showNoteDetailsModal, setShowNoteDetailsModal] = useState(false); // State for the note details modal
+  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showNoteDetailsModal, setShowNoteDetailsModal] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
   const [noteDetails, setNoteDetails] = useState({
     noteTitle: "",
@@ -35,9 +33,9 @@ const Dashboard = () => {
   });
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false); // Define isEditing state
-  const [editableNote, setEditableNote] = useState(null); // Define editableNote state
-  const [updateSuccessMessage, setUpdateSuccessMessage] = useState(""); // Define updateSuccessMessage state
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableNote, setEditableNote] = useState(null);
+  const [updateSuccessMessage, setUpdateSuccessMessage] = useState("");
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
   const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
@@ -52,12 +50,12 @@ const Dashboard = () => {
     setCurrentPage(pageNumber);
   };
 
-  // Calculate the range of notes to display
+  // range of notes to display
   const indexOfLastNote = currentPage * notesPerPage;
   const indexOfFirstNote = indexOfLastNote - notesPerPage;
   const currentNotes = notes.slice(indexOfFirstNote, indexOfLastNote);
 
-  // Function to update isMobileView based on screen width
+  // Function to update isMobileView
   const updateIsMobileView = () => {
     setIsMobileView(window.innerWidth <= 768);
   };
@@ -86,7 +84,7 @@ const Dashboard = () => {
 
       dispatch(getAllNotes());
 
-      // Set a timer to hide the success message after 2 seconds
+      // Set a timer to hide the message
       setTimeout(() => {
         setSuccessMessage("");
         setIsSuccessMessageVisible(false);
@@ -198,8 +196,10 @@ const Dashboard = () => {
           <hr />
           <h5>Welcome, {username}!</h5>
           <div className="Developer-credits">
-          Developed by 
-            <Link to="https://sureshgobi.web.app/" target="_blank"><p>Suresh Gobi</p></Link>
+            Developed by
+            <Link to="https://sureshgobi.web.app/" target="_blank">
+              <p>Suresh Gobi</p>
+            </Link>
           </div>
           <div className="logout-button-container">
             <button className="btn btn-danger" onClick={handleLogout}>
@@ -207,12 +207,7 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
-        {/* ... */}
       </div>
-
-      {/* <div className="sidebar">
-        
-      </div> */}
 
       <div className="main-content">
         <div className="dashboard-header">
@@ -239,6 +234,7 @@ const Dashboard = () => {
           <div className="update-success-message">{updateSuccessMessage}</div>
         )}
 
+        {/* Add note Modal */}
         <Modal show={showModal} onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Add a Note</Modal.Title>
@@ -315,7 +311,7 @@ const Dashboard = () => {
           </div>
         ))}
 
-        {/* Delete Confirmation Modal */}
+        {/* Delete Modal */}
         <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Confirm Delete</Modal.Title>

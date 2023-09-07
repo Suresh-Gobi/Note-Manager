@@ -1,10 +1,11 @@
-import axios from "axios";
-// import { useNavigate } from 'react-router-dom';
-import jwt_decode from "jwt-decode";
+import axios from "axios"; // Import Axios lib
+import jwt_decode from "jwt-decode"; // Import JWT for decoding JWT tokens
 
+// Action to sign up a user
 export const signup = (userData) => {
   return async (dispatch) => {
     try {
+      // POST request to create a new user
       await axios.post("http://localhost:5000/users/create", userData);
       dispatch({ type: "SIGNUP_SUCCESS" });
     } catch (error) {
@@ -13,23 +14,25 @@ export const signup = (userData) => {
   };
 };
 
+// Action to login a user
 export const loginUser = (userData) => async (dispatch) => {
   try {
-    // Perform API call to authenticate user
+    // Perform an API call to authenticate the user
     const response = await axios.post(
       "http://localhost:5000/users/login",
       userData
     );
-    const token = response.data.token;
+    const token = response.data.token; // Extract the JWT token from the response
 
-    // Decode the JWT token to access user data
+    // Decode the JWT token
     const decodedToken = jwt_decode(token);
-    const { email, username } = decodedToken; // Extract email and username
+    const { email, username } = decodedToken;
 
-    // Save token to local storage
+    // Save the token and username to local storage
     localStorage.setItem("token", token);
     localStorage.setItem("username", username);
 
+    // Dispatch a success action with user data
     dispatch({
       type: "LOGIN_SUCCESS",
       user: {
@@ -37,19 +40,16 @@ export const loginUser = (userData) => async (dispatch) => {
         username,
       },
     });
-
-    // Redirect the user to the dashboard page (if using a router library)
-    // navigate('/dashboard');
   } catch (error) {
     dispatch({ type: "LOGIN_FAILURE", payload: error.response.data.message });
   }
 };
 
+// Action to add a note
 export const addNote = (noteData) => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token"); // Get the JWT token from local storage
 
-    // Ensure the token is available before making the request
     if (!token) {
       throw new Error("Token is missing");
     }
@@ -61,32 +61,24 @@ export const addNote = (noteData) => async (dispatch) => {
       },
     };
 
-    // Perform API call to add a note
+    // API call to add a note
     const response = await axios.post(
       "http://localhost:5000/users/addNote",
       noteData,
-      config // Include the config with headers
+      config
     );
 
-    // Handle success (e.g., show a success message to the user)
     console.log(response.data);
-
-    // You can dispatch an action here if needed
-    // dispatch({ type: "ADD_NOTE_SUCCESS" });
   } catch (error) {
-    // Handle error (e.g., display an error message to the user)
     console.error(error);
-    // You can dispatch an action here if needed
-    // dispatch({ type: "ADD_NOTE_FAILURE", error });
   }
 };
 
-// Add this action to userActions.js
+// Action to get all notes
 export const getAllNotes = () => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token"); // Get the JWT token from local storage
 
-    // Ensure the token is available before making the request
     if (!token) {
       throw new Error("Token is missing");
     }
@@ -98,7 +90,7 @@ export const getAllNotes = () => async (dispatch) => {
       },
     };
 
-    // Perform API call to get all notes
+    // Perform an API call to get all notes
     const response = await axios.get(
       "http://localhost:5000/users/getAllNote",
       config
@@ -110,27 +102,28 @@ export const getAllNotes = () => async (dispatch) => {
       notes: response.data.notes,
     });
   } catch (error) {
-    // Handle error (e.g., display an error message to the user)
+    // Handle error (e.g., you can dispatch an error action here)
     console.error(error);
-    // You can dispatch an action here if needed
-    // dispatch({ type: "GET_ALL_NOTES_FAILURE", error });
   }
 };
 
+// Action to delete a note
 export const deleteNote = (noteId) => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token"); // Get the JWT token from local storage
 
     if (!token) {
       throw new Error("Token is missing");
     }
 
+    // Set up the request headers with the token
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
 
+    // Perform an API call to delete a note
     await axios.delete(
       `http://localhost:5000/users/deleteNote/${noteId}`,
       config
@@ -139,29 +132,28 @@ export const deleteNote = (noteId) => async (dispatch) => {
     // After successful deletion, refetch all notes to update the state
     dispatch(getAllNotes());
   } catch (error) {
+    // Handle error (e.g., you can display an error message to the user)
     console.error(error);
-    // Handle error, such as displaying an error message to the user
   }
 };
 
-// Update a note by ID
-// userActions.js
-
-// Add an action for updating a note
+// Action to update a note by ID
 export const updateNote = (noteId, updatedNoteData) => async (dispatch) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token"); // Get the JWT token from local storage
 
     if (!token) {
       throw new Error("Token is missing");
     }
 
+    // Set up the request headers with the token
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
 
+    // Perform an API call to update a note
     const response = await axios.put(
       `http://localhost:5000/users/updateNote/${noteId}`,
       updatedNoteData,
@@ -169,28 +161,22 @@ export const updateNote = (noteId, updatedNoteData) => async (dispatch) => {
     );
 
     if (response.status === 200) {
-      // Note updated successfully
       dispatch({ type: "UPDATE_NOTE_SUCCESS" });
-      return true; // Indicate success
+      return true;
     } else {
-      // Handle update failure
       console.error("Update failed");
-      return false; // Indicate failure
+      return false;
     }
   } catch (error) {
     console.error("An error occurred during the update:", error);
-    return false; // Indicate failure
+    return false;
   }
 };
 
-
-
-
+// Action to log out a user
 export const logoutUser = () => (dispatch) => {
-  // Clear token from local storage
+  // Clear the token and username from local storage
   localStorage.removeItem("token");
   localStorage.removeItem("username");
   dispatch({ type: "LOGOUT" });
-  // Redirect the user to the login page
-  // You can use a router library like react-router for this
 };
