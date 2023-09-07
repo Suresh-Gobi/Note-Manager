@@ -1,5 +1,5 @@
 {
-  "homepage": "https://Suresh-Gobi.github.io/Note-manager/development",
+  "homepage": "https://Suresh-Gobi.github.io/Note-manager",
   "name": "note-manager",
   "version": "0.1.0",
   "private": true,
@@ -30,9 +30,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build development",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -b development -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
