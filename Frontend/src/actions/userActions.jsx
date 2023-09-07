@@ -6,7 +6,7 @@ export const signup = (userData) => {
   return async (dispatch) => {
     try {
       // POST request to create a new user
-      await axios.post("http://localhost:5000/users/create", userData);
+      await axios.post("https://note-manager-backend.onrender.com/users/create", userData);
       dispatch({ type: "SIGNUP_SUCCESS" });
     } catch (error) {
       dispatch({ type: "SIGNUP_ERROR", error });
@@ -19,7 +19,7 @@ export const loginUser = (userData) => async (dispatch) => {
   try {
     // Perform an API call to authenticate the user
     const response = await axios.post(
-      "http://localhost:5000/users/login",
+      "https://note-manager-backend.onrender.com/users/login",
       userData
     );
     const token = response.data.token; // Extract the JWT token from the response
@@ -63,7 +63,7 @@ export const addNote = (noteData) => async (dispatch) => {
 
     // API call to add a note
     const response = await axios.post(
-      "http://localhost:5000/users/addNote",
+      "https://note-manager-backend.onrender.com/users/addNote",
       noteData,
       config
     );
@@ -92,7 +92,7 @@ export const getAllNotes = () => async (dispatch) => {
 
     // Perform an API call to get all notes
     const response = await axios.get(
-      "http://localhost:5000/users/getAllNote",
+      "https://note-manager-backend.onrender.com/users/getAllNote",
       config
     );
 
@@ -125,7 +125,7 @@ export const deleteNote = (noteId) => async (dispatch) => {
 
     // Perform an API call to delete a note
     await axios.delete(
-      `http://localhost:5000/users/deleteNote/${noteId}`,
+      `https://note-manager-backend.onrender.com/users/deleteNote/${noteId}`,
       config
     );
 
@@ -155,7 +155,7 @@ export const updateNote = (noteId, updatedNoteData) => async (dispatch) => {
 
     // Perform an API call to update a note
     const response = await axios.put(
-      `http://localhost:5000/users/updateNote/${noteId}`,
+      `https://note-manager-backend.onrender.com/updateNote/${noteId}`,
       updatedNoteData,
       config
     );
