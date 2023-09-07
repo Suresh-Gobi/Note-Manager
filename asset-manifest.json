@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Note-manager/static/css/main.5d23ef6f.css",
-    "main.js": "/Note-manager/static/js/main.0b243dd6.js",
+    "main.js": "/Note-manager/static/js/main.013b324b.js",
     "static/js/787.d85004f1.chunk.js": "/Note-manager/static/js/787.d85004f1.chunk.js",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/Note-manager/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
     "static/media/fontawesome-webfont.eot": "/Note-manager/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
@@ -12,11 +12,11 @@
     "static/media/layered-peaks-haikei.svg": "/Note-manager/static/media/layered-peaks-haikei.c0ff71d5d2c3cc4f70bf.svg",
     "index.html": "/Note-manager/index.html",
     "main.5d23ef6f.css.map": "/Note-manager/static/css/main.5d23ef6f.css.map",
-    "main.0b243dd6.js.map": "/Note-manager/static/js/main.0b243dd6.js.map",
+    "main.013b324b.js.map": "/Note-manager/static/js/main.013b324b.js.map",
     "787.d85004f1.chunk.js.map": "/Note-manager/static/js/787.d85004f1.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5d23ef6f.css",
-    "static/js/main.0b243dd6.js"
+    "static/js/main.013b324b.js"
   ]
 }
